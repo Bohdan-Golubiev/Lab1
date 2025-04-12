@@ -1,22 +1,22 @@
 package com;
 
 public class Calculate extends Thread{
-    private final int id;
-    private final TimeController controller;
+    private final int index;
+    private volatile boolean[] canStop;
+    private final int time;
 
-    public Calculate(int id, TimeController controller) {
-        this.id = id;
-        this.controller = controller;
+    public Calculate(int index, boolean[] canStop, int time) {
+        this.index = index;
+        this.canStop = canStop;
+        this.time = time;
     }
 
     @Override
     public void run() {
         long sum = 0;
-        boolean isStop;
-        do{
+        while (!canStop[index]) {
             sum++;
-            isStop = controller.isCanBreak();
-        } while (!isStop);
-        System.out.println("Thread: " + id + " sum - " + sum);
+        }
+        System.out.println("Потік " + (index + 1) + " Сума: " + sum + " Час: " + time + " сек.");
     }
 }
